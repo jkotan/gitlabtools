@@ -87,23 +87,16 @@ def main():
         #: system pipe
         pipe = "".join(pp)
 
-    description = "Command-line tool for creating NeXus files" \
-                  + " from XML template"
+    description = "Command-line tool for pulling all repositories " \
+                  "of gitlab (sub-)group"
 
     epilog = 'examples:\n' \
-        '  nxsfromxml  -x config.xml -p newfile.nxs -j datastring.json\n\n' \
-        '    - creates a newfile.nxs file with configuration from config.xml' \
-        ' and data from datastring.json\n\n' \
-        '  nxsfromxml  -x config.xml -p outputfile.nxs -d'\
-        ' \'{"sample_name":"sn", "chemical_formula":"H2O", ' \
-        '"beamtime_id":"1234", "title":"Sample"}\'\n\n' \
-        '    - creates an outputfile.nxs file with configuration ' \
-        'from config.xml and data from given json dictionary\n\n' \
-        '  nxsconfig get source mono slit1 mirror2 | ' \
-        'nxsfromxml -p basicsetup.nxs\n\n' \
-        '    - creates an basicsetup.nxs file with configuration ' \
-        'of source mono slit1 mirror2 components ' \
-        'created by nxsconfig get \n\n'
+        '  glpull  -a \n\n' \
+        '    - pull all repositories of "tango-ds" group\n\n' \
+        '  glpull tango-ds/DeviceClasses \n\n' \
+        '    - pull all repositories of "tango-ds/DeviceClasses" ' \
+        'subgroup\n\n'
+
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter)
