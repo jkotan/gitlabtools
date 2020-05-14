@@ -115,7 +115,7 @@ SETUPDATA = dict(
         'Programming Language :: Python :: 3.7',
     ],
     install_requires=install_requires,
-    scripts=['glclone', 'glpull'],
+    scripts=['glclone', 'glpull', 'glfromsvn'],
     cmdclass={
         # 'test': TestCommand,
         'build_sphinx': BuildDoc
