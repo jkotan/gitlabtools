@@ -37,7 +37,8 @@ class GLFromSVN(object):
         self.__trunk = options.trunk or "trunk"
         self.__branches = options.branches or "branches"
         self.__tags = options.tags or "tags"
-        self.__svnurl = "https://svn.code.sf.net/p/tango-ds/code/"
+        self.__svnurl = options.svnurl or \
+            "https://svn.code.sf.net/p/tango-ds/code/"
         self.__svndir = options.args[0] if len(options.args) > 0 else ""
         self.__url = "%s/%s" % (self.__svnurl, self.__svndir) \
                      if self.__svndir else options.url
@@ -59,14 +60,14 @@ class GLFromSVN(object):
                  ' while read ref; ' \
                  ' do git tag -a "$ref" -m"%s" ' \
                  '        "refs/remotes/origin/tags/$ref" && '\
-                 '     echo "Add tag: $ref"; ' \
+                 '     echo "Add a new tag: $ref"; ' \
                  ' done' % (self.__localdir, self.__tagmessage)
         branchcmd = 'cd %s;' \
                     'git for-each-ref refs/remotes/origin  | ' \
                     'grep -v trunk | grep -v tag |  cut -d / -f 4-| ' \
                     'while read ref; ' \
                     'do git checkout origin/$ref -b $ref &&' \
-                    '      echo "Add branch:  $ref"; '\
+                    '      echo "Add a new branch:  $ref"; '\
                     'done' % (self.__localdir)
         commands = [clonecmd, tagcmd, branchcmd]
         if self.__url:
