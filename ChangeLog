@@ -1,5 +1,6 @@
 2020-05-14 Jan Kotanski <jankotan@gmail.com>
 	* add glfromsvn tool
+	* add glupload tool
 	* tagged as v0.2.0
 
 2020-05-13 Jan Kotanski <jankotan@gmail.com>
