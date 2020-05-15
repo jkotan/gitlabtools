@@ -21,6 +21,7 @@
 
 import subprocess
 import sys
+import os
 import argparse
 
 
@@ -44,6 +45,9 @@ class GLFromSVN(object):
                      if self.__svndir else options.url
         self.__localdir = options.localdir or self.__url.split("/")[-1]
         self.__authors = options.authors or "./authors.txt"
+        if not os.path.exists(self.__authors):
+            self.__authors = ""
+            print("Warning: %s does not exists" % self.__authors)
         self.__tagmessage = options.tagmessage or "migrate svn to git"
 
     def run(self):
@@ -51,9 +55,10 @@ class GLFromSVN(object):
         """
         # fetch all subgroups
         clonecmd = 'git svn clone %s %s -T %s -b %s -t %s ' \
-                   '--authors-file=%s' % (
-                       self.__url, self.__localdir, self.__trunk,
-                       self.__branches, self.__tags, self.__authors)
+                   % (self.__url, self.__localdir, self.__trunk,
+                      self.__branches, self.__tags)
+        if self.__authors:
+            clonecmd += '--authors-file=%s' % self.__authors
         tagcmd = 'cd %s;' \
                  ' \git for-each-ref refs/remotes/origin/tags |' \
                  ' cut -d / -f 5-|' \
