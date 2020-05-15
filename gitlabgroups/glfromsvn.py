@@ -46,8 +46,8 @@ class GLFromSVN(object):
         self.__localdir = options.localdir or self.__url.split("/")[-1]
         self.__authors = options.authors or "./authors.txt"
         if not os.path.exists(self.__authors):
-            self.__authors = ""
             print("Warning: %s does not exists" % self.__authors)
+            self.__authors = ""
         self.__tagmessage = options.tagmessage or "migrate svn to git"
 
     def run(self):
