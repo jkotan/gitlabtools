@@ -106,8 +106,8 @@ def main():
         help='group filter, e.g. "tango-ds"')
     parser.add_argument(
         "-g", "--groupurl",
-        help='default: "https://eosc-pan-git.desy.de/api/v4/groups"',
-        dest="grpurl", default="https://eosc-pan-git.desy.de/api/v4/groups")
+        help='default: "https://gitlab.desy.de/api/v4/groups"',
+        dest="grpurl", default="https://gitlab.desy.de/api/v4/groups")
     parser.add_argument(
         "-a", "--all", action="store_true",
         default=False, dest="all",
