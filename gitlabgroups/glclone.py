@@ -121,8 +121,8 @@ def main():
     parser.add_argument(
         "-g", "--groupurl",
         help='group url, '
-        'default: "https://eosc-pan-git.desy.de/api/v4/groups"',
-        dest="grpurl", default="https://eosc-pan-git.desy.de/api/v4/groups")
+        'default: "https://gitlab.desy.de/api/v4/groups"',
+        dest="grpurl", default="https://gitlab.desy.de/api/v4/groups")
     parser.add_argument(
         "-l", "--local-user", action="store_true",
         default=False, dest="local",
