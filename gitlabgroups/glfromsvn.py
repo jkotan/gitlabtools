@@ -60,7 +60,7 @@ class GLFromSVN(object):
         if self.__authors:
             clonecmd += '--authors-file=%s' % self.__authors
         tagcmd = 'cd %s;' \
-                 ' \git for-each-ref refs/remotes/origin/tags |' \
+                 ' git for-each-ref refs/remotes/origin/tags |' \
                  ' cut -d / -f 5-|' \
                  ' while read ref; ' \
                  ' do git tag -a "$ref" -m"%s" ' \
