@@ -49,7 +49,16 @@ class GLClone(object):
         """
         processes = []
         # fetch all subgroups
-        groups = json.loads(urlopen(self.__grpurl).read().decode())
+        groups = []
+        page = 1
+        while page:
+            gurl = "%s?page=%s" % (self.__grpurl, page)
+            glst = json.loads(urlopen(gurl).read().decode())
+            if glst:
+                groups.append(glst)
+                page += 1
+            else:
+                page = 0
         for sg in groups:
             found = False
             for flt in self.__filters:
@@ -61,9 +70,17 @@ class GLClone(object):
                 if not os.path.exists(filepath):
                     os.makedirs(filepath)
                 print("checking %s" % filepath)
-                sgurl = "%s/%s/projects" % (self.__grpurl, urlpath)
+                projects = []
+                page = 1
+                while page:
+                    sgurl = "%s/%s/projects?page=%s" % (self.__grpurl, urlpath, page)
+                    plst = json.loads(urlopen(sgurl).read().decode())
+                    if plst:
+                        projects.append(plst)
+                        page += 1
+                    else:
+                        page = 0
                 # fetch all projects of the current subgroup
-                projects = json.loads(urlopen(sgurl).read().decode())
                 for pr in projects:
                     purl = pr["http_url_to_repo"]
                     if not os.path.exists("%s/%s" % (filepath, pr["name"])):
