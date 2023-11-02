@@ -55,7 +55,7 @@ class GLClone(object):
             gurl = "%s?page=%s" % (self.__grpurl, page)
             glst = json.loads(urlopen(gurl).read().decode())
             if glst:
-                groups.append(glst)
+                groups.extend(glst)
                 page += 1
             else:
                 page = 0
@@ -76,7 +76,7 @@ class GLClone(object):
                     sgurl = "%s/%s/projects?page=%s" % (self.__grpurl, urlpath, page)
                     plst = json.loads(urlopen(sgurl).read().decode())
                     if plst:
-                        projects.append(plst)
+                        projects.extend(plst)
                         page += 1
                     else:
                         page = 0

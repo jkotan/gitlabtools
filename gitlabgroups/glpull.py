@@ -45,7 +45,16 @@ class GLPull(object):
         """ the main program function
         """
         # fetch all subgroups
-        groups = json.loads(urlopen(self.__grpurl).read().decode())
+        groups = []
+        page = 1
+        while page:
+            gurl = "%s?page=%s" % (self.__grpurl, page)
+            glst = json.loads(urlopen(gurl).read().decode())
+            if glst:
+                groups.extend(glst)
+                page += 1
+            else:
+                page = 0
         for sg in groups:
             found = False
             for flt in self.__filters:
@@ -56,7 +65,16 @@ class GLPull(object):
                 urlpath = sg["full_name"].replace(" / ", "%2F")
                 if os.path.exists(filepath):
                     print("checking %s" % filepath)
-                    sgurl = "%s/%s/projects" % (self.__grpurl, urlpath)
+                projects = []
+                page = 1
+                while page:
+                    sgurl = "%s/%s/projects?page=%s" % (self.__grpurl, urlpath, page)
+                    plst = json.loads(urlopen(sgurl).read().decode())
+                    if plst:
+                        projects.extend(plst)
+                        page += 1
+                    else:
+                        page = 0
                     # fetch all projects of the current subgroup
                     projects = json.loads(urlopen(sgurl).read().decode())
                     for pr in projects:
