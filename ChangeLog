@@ -1,3 +1,7 @@
+2021-11-01 Jan Kotanski <jankotan@gmail.com>
+	* read more group pages from gitlab
+	* tagged as v0.3.1
+
 2021-09-06 Jan Kotanski <jankotan@gmail.com>
 	* change default repository to gitlab.desy.de
 	* tagged as v0.3.0
