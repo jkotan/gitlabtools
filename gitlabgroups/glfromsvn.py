@@ -159,7 +159,7 @@ def main():
         default="")
     parser.add_argument(
         "-r", "--main-branch",
-        help='a name of git trunk branch "',
+        help='name of the git trunk branch, default: "main"',
         dest="mainbranch",
         default="main")
     parser.add_argument(
