@@ -83,7 +83,7 @@ class GLFromSVN(object):
             ''.format(main=self.__mainbranch)
 
         commands = [clonecmd, tagcmd, branchcmd]
-        if self.__branchmain != 'master':
+        if self.__mainbranch != 'master':
             commands.append(mainbranchcmd)
         if self.__url:
             for cmd in commands:
