@@ -75,12 +75,12 @@ class GLFromSVN(object):
             'do git checkout origin/$ref -b $ref &&' \
             '      echo "Add a new branch:  $ref"; '\
             'done' % (self.__localdir)
-        mainbranchcmd = 'cd %s;' \
+        mainbranchcmd = 'cd {ldir};' \
             'git checkout master  && '  \
             'git checkout -b {main} && '  \
             'git config init.defaultBranch {main} && ' \
             'git branch -d master '  \
-            ''.format(main=self.__mainbranch)
+            ''.format(ldir=self.__localdir, main=self.__mainbranch)
 
         commands = [clonecmd, tagcmd, branchcmd]
         if self.__mainbranch != 'master':

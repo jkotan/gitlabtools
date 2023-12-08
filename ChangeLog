@@ -1,4 +1,8 @@
 2023-12-08 Jan Kotanski <jankotan@gmail.com>
+	* fix typo
+	* tagged as v0.4.1
+
+2023-12-08 Jan Kotanski <jankotan@gmail.com>
 	* add --main-branch option to glfromsvn (#7)
 	* tagged as v0.4.0
 
