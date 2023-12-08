@@ -68,7 +68,8 @@ class GLPull(object):
                 projects = []
                 page = 1
                 while page:
-                    sgurl = "%s/%s/projects?page=%s" % (self.__grpurl, urlpath, page)
+                    sgurl = "%s/%s/projects?page=%s" % \
+                        (self.__grpurl, urlpath, page)
                     plst = json.loads(urlopen(sgurl).read().decode())
                     if plst:
                         projects.extend(plst)

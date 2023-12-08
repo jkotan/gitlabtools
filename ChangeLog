@@ -1,4 +1,8 @@
-2021-11-01 Jan Kotanski <jankotan@gmail.com>
+2023-12-08 Jan Kotanski <jankotan@gmail.com>
+	* add --main-branch option to glfromsvn (#7)
+	* tagged as v0.4.0
+
+2023-11-01 Jan Kotanski <jankotan@gmail.com>
 	* read more group pages from gitlab
 	* tagged as v0.3.1
 

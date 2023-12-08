@@ -37,6 +37,7 @@ class GLFromSVN(object):
         """
         self.__trunk = options.trunk or "trunk"
         self.__branches = options.branches or "branches"
+        self.__mainbranch = options.mainbranch or "branches"
         self.__tags = options.tags or "tags"
         self.__svnurl = options.svnurl or \
             "https://svn.code.sf.net/p/tango-ds/code/"
@@ -60,21 +61,30 @@ class GLFromSVN(object):
         if self.__authors:
             clonecmd += '--authors-file=%s' % self.__authors
         tagcmd = 'cd %s;' \
-                 ' git for-each-ref refs/remotes/origin/tags |' \
-                 ' cut -d / -f 5-|' \
-                 ' while read ref; ' \
-                 ' do git tag -a "$ref" -m"%s" ' \
-                 '        "refs/remotes/origin/tags/$ref" && '\
-                 '     echo "Add a new tag: $ref"; ' \
-                 ' done' % (self.__localdir, self.__tagmessage)
+            ' git for-each-ref refs/remotes/origin/tags |' \
+            ' cut -d / -f 5-|' \
+            ' while read ref; ' \
+            ' do git tag -a "$ref" -m"%s" ' \
+            '        "refs/remotes/origin/tags/$ref" && '\
+            '     echo "Add a new tag: $ref"; ' \
+            ' done' % (self.__localdir, self.__tagmessage)
         branchcmd = 'cd %s;' \
-                    'git for-each-ref refs/remotes/origin  | ' \
-                    'grep -v trunk | grep -v tag |  cut -d / -f 4-| ' \
-                    'while read ref; ' \
-                    'do git checkout origin/$ref -b $ref &&' \
-                    '      echo "Add a new branch:  $ref"; '\
-                    'done' % (self.__localdir)
+            'git for-each-ref refs/remotes/origin  | ' \
+            'grep -v trunk | grep -v tag |  cut -d / -f 4-| ' \
+            'while read ref; ' \
+            'do git checkout origin/$ref -b $ref &&' \
+            '      echo "Add a new branch:  $ref"; '\
+            'done' % (self.__localdir)
+        mainbranchcmd = 'cd %s;' \
+            'git checkout master  && '  \
+            'git checkout -b {main} && '  \
+            'git config init.defaultBranch {main} && ' \
+            'git branch -d master '  \
+            ''.format(main=self.__mainbranch)
+
         commands = [clonecmd, tagcmd, branchcmd]
+        if self.__branchmain != 'master':
+            commands.append(mainbranchcmd)
         if self.__url:
             for cmd in commands:
                 try:
@@ -147,6 +157,11 @@ def main():
         help='local git directory, e.g.: "DGG2"',
         dest="localdir",
         default="")
+    parser.add_argument(
+        "-r", "--main-branch",
+        help='a name of git trunk branch "',
+        dest="mainbranch",
+        default="main")
     parser.add_argument(
         "-a", "--authors",
         help='file with authors, '
