@@ -1,3 +1,7 @@
+2023-12-20 Jan Kotanski <jankotan@gmail.com>
+	* add support for fetching projects in glclone (#10)
+	* tagged as v0.5.0
+
 2023-12-08 Jan Kotanski <jankotan@gmail.com>
 	* fix typo
 	* tagged as v0.4.1

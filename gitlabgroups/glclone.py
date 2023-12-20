@@ -51,6 +51,7 @@ class GLClone(object):
         # fetch all subgroups
         groups = []
         page = 1
+        found = False
         while page:
             gurl = "%s?page=%s" % (self.__grpurl, page)
             glst = json.loads(urlopen(gurl).read().decode())
@@ -59,6 +60,7 @@ class GLClone(object):
                 page += 1
             else:
                 page = 0
+
         for sg in groups:
             found = False
             for flt in self.__filters:
@@ -97,6 +99,53 @@ class GLClone(object):
                             processes.append(p)
                         except Exception as e:
                             print("Error on %s: %s" % (purl, str(e)))
+                continue
+        project = ""
+        if not found:
+            for sg in groups:
+                project = ""
+                for flt in self.__filters:
+                    sflt = flt.split("/")
+                    if sflt:
+                        pr = flt[-1]
+                        flt = "/".join(sflt[:-1])
+                        if sg["full_path"].lower().startswith(flt):
+                            project = pr
+                if project:
+                    filepath = sg["full_name"].replace(" / ", "/")
+                    urlpath = sg["full_name"].replace(" / ", "%2F")
+                    if not os.path.exists(filepath):
+                        os.makedirs(filepath)
+                    print("checking %s" % filepath)
+                    projects = []
+                    page = 1
+                    while page:
+                        sgurl = "%s/%s/projects?page=%s" \
+                            % (self.__grpurl, urlpath, page)
+                        plst = json.loads(urlopen(sgurl).read().decode())
+                        if plst:
+                            projects.extend(plst)
+                            page += 1
+                        else:
+                            page = 0
+                    # fetch all projects of the current subgroup
+                    for pr in projects:
+                        if pr == project:
+                            purl = pr["http_url_to_repo"]
+                            if not os.path.exists(
+                                    "%s/%s" % (filepath, pr["name"])):
+                                clonecmd = 'git clone %s %s/%s' % (
+                                    purl, filepath, pr["name"])
+                                if self.__user:
+                                    clonecmd = clonecmd.replace(
+                                        "://", "://%s@" % self.__user)
+                                print(clonecmd)
+                                try:
+                                    command = shlex.split(clonecmd)
+                                    p = subprocess.Popen(command)
+                                    processes.append(p)
+                                except Exception as e:
+                                    print("Error on %s: %s" % (purl, str(e)))
 
         print("Waiting for subprocesses")
         [p.wait() for p in processes]
