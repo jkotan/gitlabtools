@@ -173,7 +173,10 @@ def main():
         ' with gitlab user defined by local user\n\n' \
         '  glclone tango-ds/DeviceClasses \n\n' \
         '    - clone all repositories of "tango-ds/DeviceClasses" ' \
-        'subgroup\n\n'
+        'subgroup\n\n' \
+        '  glclone tango-ds/DeviceClasses/BeamlineComponents/ABS300 \n\n' \
+        '    - clone "tango-ds/DeviceClasses/BeamlineComponents/ABS300" ' \
+        'project\n\n'
 
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
