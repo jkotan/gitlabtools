@@ -107,7 +107,7 @@ class GLClone(object):
                 for flt in self.__filters:
                     sflt = flt.split("/")
                     if sflt:
-                        pr = flt[-1]
+                        pr = sflt[-1]
                         flt = "/".join(sflt[:-1])
                         if sg["full_path"].lower().startswith(flt):
                             project = pr
@@ -130,7 +130,8 @@ class GLClone(object):
                             page = 0
                     # fetch all projects of the current subgroup
                     for pr in projects:
-                        if pr == project:
+                        print("PR", pr["name"].lower() ,project.lower())
+                        if pr["name"].lower() == project.lower():
                             purl = pr["http_url_to_repo"]
                             if not os.path.exists(
                                     "%s/%s" % (filepath, pr["name"])):
