@@ -73,12 +73,12 @@ class TestCommand(Command):
 
 #: required python packages
 install_requires = [
-    'h5py',
     'pytz',
     'numpy>1.6.0',
     'lxml',
     'fabio',
     'nxstools',
+    # 'h5py',
     # 'pymysqldb',
     # 'psycopg2-binary'
     # 'psycopg2'
