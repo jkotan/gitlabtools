@@ -1,3 +1,7 @@
+2024-06-06 Jan Kotanski <jankotan@gmail.com>
+	* rebuild without h5py
+	* tagged as v0.5.2
+
 2023-12-20 Jan Kotanski <jankotan@gmail.com>
 	* fix fetching projects in glclone (#13)
 	* tagged as v0.5.1
