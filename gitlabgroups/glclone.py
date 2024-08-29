@@ -94,26 +94,35 @@ class GLClone(object):
                 # fetch all projects of the current subgroup
                 for pr in projects:
                     purl = pr["http_url_to_repo"]
+                    cwd = ''
                     if not os.path.exists("%s/%s" % (filepath, pr["name"])):
                         clonecmd = 'git clone %s %s/%s' % (
                             purl, filepath, pr["name"])
-                        if self.__token:
-                            if not self.__user:
-                                self.__user = getpass.getuser()
-                                clonecmd = clonecmd.replace(
-                                    "://", "://%s:%s@" %
-                                    (self.__user, self.__token))
-                        elif self.__user:
-                            clonecmd = clonecmd.replace(
-                                "://", "://%s@" % self.__user)
-                        print(clonecmd)
-                        try:
-                            command = shlex.split(clonecmd)
+
+                    else:
+                        cwd = '%s/%s' % (filepath, pr["name"])
+                        clonecmd = 'git pull %s' % purl
+                    # print("TOKEN %s" % self.__token)
+                    if self.__token:
+                        if not self.__user:
+                            self.__user = getpass.getuser()
+                        clonecmd = clonecmd.replace(
+                            "://", "://%s:%s@" %
+                            (self.__user, self.__token))
+                    elif self.__user:
+                        clonecmd = clonecmd.replace(
+                            "://", "://%s@" % self.__user)
+                    # print(clonecmd)
+                    try:
+                        command = shlex.split(clonecmd)
+                        if cwd:
+                            p = subprocess.Popen(command, cwd=cwd)
+                        else:
                             p = subprocess.Popen(command)
-                            processes.append(p)
-                        except Exception as e:
-                            print("Error on %s: %s" % (purl, str(e)))
-                continue
+                        processes.append(p)
+                    except Exception as e:
+                        print("Error on %s: %s" % (purl, str(e)))
+            continue
         project = ""
         if not found:
             for sg in groups:
@@ -149,26 +158,35 @@ class GLClone(object):
                         # print("PR", pr["name"].lower(), project.lower())
                         if pr["name"].lower() == project.lower():
                             purl = pr["http_url_to_repo"]
+                            cwd = ''
                             if not os.path.exists(
                                     "%s/%s" % (filepath, pr["name"])):
                                 clonecmd = 'git clone %s %s/%s' % (
                                     purl, filepath, pr["name"])
-                                if self.__token:
-                                    if not self.__user:
-                                        self.__user = getpass.getuser()
-                                    clonecmd = clonecmd.replace(
-                                        "://", "://%s:%s@" %
-                                        (self.__user, self.__token))
-                                elif self.__user:
-                                    clonecmd = clonecmd.replace(
-                                        "://", "://%s@" % self.__user)
-                                print(clonecmd)
-                                try:
-                                    command = shlex.split(clonecmd)
+                            else:
+                                cwd = '%s/%s' % (filepath, pr["name"])
+                                clonecmd = 'git pull %s' % purl
+
+                            # print("TOKEN %s" % self.__token)
+                            if self.__token:
+                                if not self.__user:
+                                    self.__user = getpass.getuser()
+                                clonecmd = clonecmd.replace(
+                                    "://", "://%s:%s@" %
+                                    (self.__user, self.__token))
+                            elif self.__user:
+                                clonecmd = clonecmd.replace(
+                                    "://", "://%s@" % self.__user)
+                            # print(clonecmd)
+                            try:
+                                command = shlex.split(clonecmd)
+                                if cwd:
+                                    p = subprocess.Popen(command, cwd=cwd)
+                                else:
                                     p = subprocess.Popen(command)
-                                    processes.append(p)
-                                except Exception as e:
-                                    print("Error on %s: %s" % (purl, str(e)))
+                                processes.append(p)
+                            except Exception as e:
+                                print("Error on %s: %s" % (purl, str(e)))
 
         print("Waiting for subprocesses")
         [p.wait() for p in processes]
