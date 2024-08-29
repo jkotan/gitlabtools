@@ -19,7 +19,7 @@
 
 """ gitlab group tools for cloning all repositories"""
 
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 import subprocess
 import json
 import os
@@ -43,6 +43,11 @@ class GLClone(object):
         self.__grpurl = options.grpurl
         gfilters = options.args or ["tango-ds"]
         self.__filters = [gf.lower() for gf in gfilters]
+        self.__token = ""
+        if options.tokenfile:
+            with open(options.tokenfile) as fl:
+                self.__token = fl.read().strip()
+
 
     def run(self):
         """ the main program function
@@ -53,7 +58,9 @@ class GLClone(object):
         page = 1
         found = False
         while page:
-            gurl = "%s?page=%s" % (self.__grpurl, page)
+            gurl = Request("%s?page=%s" % (self.__grpurl, page))
+            if self.__token:
+                gurl.add_header('PRIVATE-TOKEN', self.__token)
             glst = json.loads(urlopen(gurl).read().decode())
             if glst:
                 groups.extend(glst)
@@ -75,8 +82,10 @@ class GLClone(object):
                 projects = []
                 page = 1
                 while page:
-                    sgurl = "%s/%s/projects?page=%s" \
-                        % (self.__grpurl, urlpath, page)
+                    sgurl = Request("%s/%s/projects?page=%s"
+                                    % (self.__grpurl, urlpath, page))
+                    if self.__token:
+                        sgurl.add_header('PRIVATE-TOKEN', self.__token)
                     plst = json.loads(urlopen(sgurl).read().decode())
                     if plst:
                         projects.extend(plst)
@@ -89,7 +98,13 @@ class GLClone(object):
                     if not os.path.exists("%s/%s" % (filepath, pr["name"])):
                         clonecmd = 'git clone %s %s/%s' % (
                             purl, filepath, pr["name"])
-                        if self.__user:
+                        if self.__token:
+                            if not self.__user:
+                                self.__user = getpass.getuser()
+                                clonecmd = clonecmd.replace(
+                                    "://", "://%s:%s@" %
+                                    (self.__user, self.__token))
+                        elif self.__user:
                             clonecmd = clonecmd.replace(
                                 "://", "://%s@" % self.__user)
                         print(clonecmd)
@@ -120,8 +135,10 @@ class GLClone(object):
                     projects = []
                     page = 1
                     while page:
-                        sgurl = "%s/%s/projects?page=%s" \
-                            % (self.__grpurl, urlpath, page)
+                        sgurl = Request("%s/%s/projects?page=%s"
+                                        % (self.__grpurl, urlpath, page))
+                        if self.__token:
+                            sgurl.add_header('PRIVATE-TOKEN', self.__token)
                         plst = json.loads(urlopen(sgurl).read().decode())
                         if plst:
                             projects.extend(plst)
@@ -137,7 +154,13 @@ class GLClone(object):
                                     "%s/%s" % (filepath, pr["name"])):
                                 clonecmd = 'git clone %s %s/%s' % (
                                     purl, filepath, pr["name"])
-                                if self.__user:
+                                if self.__token:
+                                    if not self.__user:
+                                        self.__user = getpass.getuser()
+                                    clonecmd = clonecmd.replace(
+                                        "://", "://%s:%s@" %
+                                        (self.__user, self.__token))
+                                elif self.__user:
                                     clonecmd = clonecmd.replace(
                                         "://", "://%s@" % self.__user)
                                 print(clonecmd)
@@ -189,6 +212,10 @@ def main():
         "-u", "--user",
         help="gitlab user",
         dest="user", default="")
+    parser.add_argument(
+        "-t", "--token-file",
+        help="token file",
+        dest="tokenfile", default="")
     parser.add_argument(
         "-g", "--groupurl",
         help='group url, '
