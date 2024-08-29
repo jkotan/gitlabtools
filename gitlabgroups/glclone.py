@@ -48,7 +48,6 @@ class GLClone(object):
             with open(options.tokenfile) as fl:
                 self.__token = fl.read().strip()
 
-
     def run(self):
         """ the main program function
         """
@@ -147,7 +146,7 @@ class GLClone(object):
                             page = 0
                     # fetch all projects of the current subgroup
                     for pr in projects:
-                        print("PR", pr["name"].lower() ,project.lower())
+                        # print("PR", pr["name"].lower(), project.lower())
                         if pr["name"].lower() == project.lower():
                             purl = pr["http_url_to_repo"]
                             if not os.path.exists(
