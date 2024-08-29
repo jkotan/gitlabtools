@@ -208,12 +208,14 @@ def main():
 
     epilog = 'examples:\n' \
         '  glclone  -a \n\n' \
+        '    - clone all public repositories of "tango-ds" group\n\n' \
+        '  glclone  -a -t /home/p00user/private/.token \n\n' \
         '    - clone all repositories of "tango-ds" group\n\n' \
         '  glclone  -a -l  \n\n' \
-        '    - clone all repositories of tango-ds group' \
+        '    - clone all public repositories of tango-ds group' \
         ' with gitlab user defined by local user\n\n' \
         '  glclone tango-ds/DeviceClasses \n\n' \
-        '    - clone all repositories of "tango-ds/DeviceClasses" ' \
+        '    - clone all public repositories of "tango-ds/DeviceClasses" ' \
         'subgroup\n\n' \
         '  glclone tango-ds/DeviceClasses/BeamlineComponents/ABS300 \n\n' \
         '    - clone "tango-ds/DeviceClasses/BeamlineComponents/ABS300" ' \
