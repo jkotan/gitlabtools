@@ -1,3 +1,8 @@
+2024-08-29 Jan Kotanski <jankotan@gmail.com>
+	* add support for --token-file (#16)
+	* glclone pulls if project exists (#16)
+	* tagged as v0.6.0
+
 2024-06-06 Jan Kotanski <jankotan@gmail.com>
 	* rebuild without h5py
 	* tagged as v0.5.2
