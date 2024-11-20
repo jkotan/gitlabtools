@@ -132,6 +132,10 @@ def main():
         'args', metavar='filter', type=str, nargs='?',
         help='group filter, e.g. "tango-ds"')
     parser.add_argument(
+        "-t", "--token-file",
+        help="token file",
+        dest="tokenfile", default="")
+    parser.add_argument(
         "-g", "--groupurl",
         help='default: "https://gitlab.desy.de/api/v4/groups"',
         dest="grpurl", default="https://gitlab.desy.de/api/v4/groups")
