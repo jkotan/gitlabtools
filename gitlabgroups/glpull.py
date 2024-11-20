@@ -19,7 +19,7 @@
 
 """ gitlab group tools for pulling all repositories"""
 
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 import subprocess
 import json
 import os
@@ -40,6 +40,10 @@ class GLPull(object):
         self.__grpurl = options.grpurl
         gfilters = options.args or ["tango-ds"]
         self.__filters = [gf.lower() for gf in gfilters]
+        self.__token = ""
+        if options.tokenfile:
+            with open(options.tokenfile) as fl:
+                self.__token = fl.read().strip()
 
     def run(self):
         """ the main program function
@@ -48,7 +52,9 @@ class GLPull(object):
         groups = []
         page = 1
         while page:
-            gurl = "%s?page=%s" % (self.__grpurl, page)
+            gurl = Request("%s?page=%s" % (self.__grpurl, page))
+            if self.__token:
+                gurl.add_header('PRIVATE-TOKEN', self.__token)
             glst = json.loads(urlopen(gurl).read().decode())
             if glst:
                 groups.extend(glst)
@@ -62,14 +68,17 @@ class GLPull(object):
                     found = True
             if found:
                 filepath = sg["full_name"].replace(" / ", "/")
-                urlpath = sg["full_name"].replace(" / ", "%2F")
+                urlpath = sg["full_name"].replace(
+                    " / ", "%2F").replace(" ", "%20")
                 if os.path.exists(filepath):
                     print("checking %s" % filepath)
                 projects = []
                 page = 1
                 while page:
-                    sgurl = "%s/%s/projects?page=%s" % \
-                        (self.__grpurl, urlpath, page)
+                    sgurl = Request("%s/%s/projects?page=%s"
+                                    % (self.__grpurl, urlpath, page))
+                    if self.__token:
+                        sgurl.add_header('PRIVATE-TOKEN', self.__token)
                     plst = json.loads(urlopen(sgurl).read().decode())
                     if plst:
                         projects.extend(plst)
@@ -77,7 +86,6 @@ class GLPull(object):
                     else:
                         page = 0
                     # fetch all projects of the current subgroup
-                    projects = json.loads(urlopen(sgurl).read().decode())
                     for pr in projects:
                         purl = pr["http_url_to_repo"]
                         if os.path.exists("%s/%s" % (filepath, pr["name"])):

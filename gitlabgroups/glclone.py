@@ -74,7 +74,8 @@ class GLClone(object):
                     found = True
             if found:
                 filepath = sg["full_name"].replace(" / ", "/")
-                urlpath = sg["full_name"].replace(" / ", "%2F").replace(" ", "%20")
+                urlpath = sg["full_name"].replace(
+                    " / ", "%2F").replace(" ", "%20")
                 if not os.path.exists(filepath):
                     os.makedirs(filepath)
                 print("checking %s" % filepath)
@@ -135,7 +136,8 @@ class GLClone(object):
                             project = pr
                 if project:
                     filepath = sg["full_name"].replace(" / ", "/")
-                    urlpath = sg["full_name"].replace(" / ", "%2F").replace(" ", "%20")
+                    urlpath = sg["full_name"].replace(
+                        " / ", "%2F").replace(" ", "%20")
                     if not os.path.exists(filepath):
                         os.makedirs(filepath)
                     print("checking %s" % filepath)
