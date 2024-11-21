@@ -1,3 +1,8 @@
+2024-11-21 Jan Kotanski <jankotan@gmail.com>
+	* add support for --token-file in glpull (#18)
+	* add support for ' ' in group/project names (#18)
+	* tagged as v0.7.0
+
 2024-08-29 Jan Kotanski <jankotan@gmail.com>
 	* add support for --token-file (#16)
 	* glclone pulls if project exists (#16)
