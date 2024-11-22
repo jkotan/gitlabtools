@@ -129,10 +129,11 @@ class GLClone(object):
             for sg in groups:
                 project = ""
                 for flt in self.__filters:
-                    sflp = sg["full_path"].split("/")
-                    if sflp:
-                        pr = sflp[-1]
-                        if sg["full_path"].lower().startswith(flt):
+                    sflt = flt.split("/")
+                    if len(sflt) > 1:
+                        pr = sflt[-1]
+                        dflt = "/".join(sflt[:-1])
+                        if sg["full_path"].lower() == dflt:
                             project = pr
                 if project:
                     filepath = sg["full_name"].replace(" / ", "/")
